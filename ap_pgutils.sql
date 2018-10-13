@@ -25,15 +25,6 @@ LANGUAGE C STABLE
 AS '$libdir/ap_pgutils.so', 'pg_argon2_verify';
 
 CREATE OR REPLACE FUNCTION
-totp_verify(
-  IN b32_secret TEXT,
-  IN otp INTEGER,
-  IN tolerance INTEGER
-) RETURNS BOOLEAN
-LANGUAGE C VOLATILE
-AS '$libdir/ap_pgutils.so', 'pg_totp_verify';
-
-CREATE OR REPLACE FUNCTION
 b32_encode(
   IN data BYTEA
 ) RETURNS TEXT

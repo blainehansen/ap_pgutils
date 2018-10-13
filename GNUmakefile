@@ -1,6 +1,3 @@
-PG_HOME=	/usr/local/postgres64
-PG_BIN=		$(PG_HOME)/bin/postgres
-
 EXTENSION=	ap_pgutils
 MODULE_big=	ap_pgutils
 OBJS=		ap_pgutils.o
@@ -15,7 +12,7 @@ COMMON_CFLAGS=	-g -O0
 
 PG_CPPFLAGS=	$(COMMON_CFLAGS) -Iargon2/include -I/usr/local/ssl/include
 
-PG_CONFIG = $(PG_HOME)/bin/pg_config
+PG_CONFIG = pg_config
 PGXS := $(shell $(PG_CONFIG) --pgxs)
 include $(PGXS)
 
@@ -29,11 +26,11 @@ ARGON_CFLAGS=	-fPIC -D_REENTRANT \
 argon2/libargon2.a: argon2
 	(cd argon2; $(MAKE) CC=gcc LIB_EXT=a CFLAGS="$(ARGON_CFLAGS)" libargon2.a)
 
-PGT=	|$(PG_BIN) --single -D testdata postgres
+PGT=	| postgres --single -D testdata postgres
 test: ap_pgutils.so
 	-@printf '\033[1;31m%s\033[0m\n' 'init DB'
 	-rm -rf testdata
-	$(PG_HOME)/bin/initdb testdata >/dev/null 2>&1
+	initdb testdata >/dev/null 2>&1
 	-@printf '\033[1;31m%s\033[0m\n' 'load extension'
 	tr '\n' ' ' < ap_pgutils.sql|sed -e s@.libdir@`pwd`@g$(PGT)
 	@echo ""
